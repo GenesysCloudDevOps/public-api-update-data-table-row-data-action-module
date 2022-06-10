@@ -7,21 +7,76 @@ resource "genesyscloud_integration_action" "action" {
     contract_input  = jsonencode({
         "$schema" = "http://json-schema.org/draft-04/schema#",
         "additionalProperties" = true,
-        "description" = "Updates a Single Row in a Data Table",
+        "description" = "using this to update the table",
         "properties" = {
-            "AttributeName" = {
-                "description" = "The attribute name to update in the table",
+            "DatatableId" = {
+                "description" = "Data Table ID",
                 "type" = "string"
             },
-            "AttributeValue" = {
-                "description" = "The attribute value to write in the table",
+            "Key" = {
+                "description" = "Which key to update",
                 "type" = "string"
             },
-            "DataTableId" = {
+            "StringFieldName1" = {
                 "type" = "string"
+            },
+            "StringFieldName2" = {
+                "type" = "string"
+            },
+            "StringFieldName3" = {
+                "type" = "string"
+            },
+            "BoolFieldName1" = {
+                "type" = "string"
+            },
+            "BoolFieldName2" = {
+                "type" = "string"
+            },
+            "BoolFieldName3" = {
+                "type" = "string"
+            },
+            "IntFieldName1" = {
+                "type" = "string"
+            },
+            "IntFieldName2" = {
+                "type" = "string"
+            },
+            "IntFieldName3" = {
+                "type" = "string"
+            },
+            "StringFieldValue1" = {
+                "type" = "string"
+            },
+            "StringFieldValue2" = {
+                "type" = "string"
+            },
+            "StringFieldValue3" = {
+                "type" = "string"
+            },
+            "BoolFieldValue1" = {
+                "type" = "boolean"
+            },
+            "BoolFieldValue2" = {
+                "type" = "boolean"
+            },
+            "BoolFieldValue3" = {
+                "type" = "boolean"
+            },
+            "IntFieldValue1" = {
+                "type" = "integer"
+            },
+            "IntFieldValue2" = {
+                "type" = "integer"
+            },
+            "IntFieldValue3" = {
+                "type" = "integer"
             }
         },
-        "title" = "Update a single attribute in the generic attribute table.",
+        "required" = [
+            "Key",
+            "DatatableId"
+        ],
+        "title" = "Update Table",
         "type" = "object"
     })
     contract_output = jsonencode({
@@ -31,10 +86,11 @@ resource "genesyscloud_integration_action" "action" {
     })
     
     config_request {
-        request_template     = "{\"AttributeValue\": \"$${input.AttributeValue}\", \"key\": \"$${input.AttributeName}\"}"
-        request_type         = "PUT"
-        request_url_template = "/api/v2/flows/datatables/$${input.DataTableId}/rows/$${input.AttributeName}"
+    request_template     = "{\n    \"key\":\"$${input.Key}\"\n#if(\"$!{input.StringFieldName1}\" != \"\")\n    ,\"$!{input.StringFieldName1}\": \"$!{input.StringFieldValue1}\"\n#end\n#if(\"$!{input.StringFieldName2}\" != \"\")\n    ,\"$!{input.StringFieldName2}\": \"$!{input.StringFieldValue2}\"\n#end\n#if(\"$!{input.StringFieldName3}\" != \"\")\n    ,\"$!{input.StringFieldName3}\": \"$!{input.StringFieldValue3}\"\n#end\n\n#if(\"$!{input.IntFieldName1}\" != \"\" && \"$!{input.IntFieldValue1}\" != \"\")\n    ,\"$!{input.IntFieldName1}\": $!{input.IntFieldValue1}\n#end\n#if(\"$!{input.IntFieldName2}\" != \"\" && \"$!{input.IntFieldValue2}\" != \"\")\n    ,\"$!{input.IntFieldName2}\": $!{input.IntFieldValue2}\n#end\n#if(\"$!{input.IntFieldName3}\" != \"\" && \"$!{input.IntFieldValue3}\" != \"\")\n    ,\"$!{input.IntFieldName3}\": $!{input.IntFieldValue3}\n#end\n\n#if(\"$!{input.BoolFieldName1}\" != \"\")\n    ,\"$!{input.BoolFieldName1}\": $!{input.BoolFieldValue1}\n#end\n#if(\"$!{input.BoolFieldName2}\" != \"\")\n    ,\"$!{input.BoolFieldName2}\": $!{input.BoolFieldValue2}\n#end\n#if(\"$!{input.BoolFieldName3}\" != \"\")\n    ,\"$!{input.BoolFieldName3}\": $!{input.BoolFieldValue3}\n#end\n}"
+    request_type         = "PUT"
+    request_url_template = "/api/v2/flows/datatables/$${input.DatatableId}/rows/$${input.Key.replace(' ','%20')}"
         headers = {
+            UserAgent = "PureCloudIntegrations/1.0"
             Content-Type = "application/json"
         }
     }
