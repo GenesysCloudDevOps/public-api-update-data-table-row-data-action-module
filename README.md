@@ -6,7 +6,7 @@ Shown below is an example of how to configure the remote module.
 
 ```hcl
 module "data_action" {
-    source             = "git::https://github.com/GenesysCloudDevOps/public-api-update-generic-attribute-data-action-module.git?ref=main"
+    source             = "git::https://github.com/GenesysCloudDevOps/public-api-update-data-table-row-data-action-module.git?ref=main"
     action_name        = "Update Data Table Row"
     action_category    = "${module.gc_integration.integration_name}"
     integration_id     = "${module.gc_integration.integration_id}"
