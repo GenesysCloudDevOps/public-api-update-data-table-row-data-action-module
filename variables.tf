@@ -25,6 +25,8 @@ variable "data_table_custom_fields" {
         type  = string
     }))
 
+    description = "List of objects defining custom data table fields. Example: [{'field': 'dob', 'type': 'string'}]"
+
     validation {
         condition     = length(var.data_table_custom_fields) > 0 
         error_message = "The data_table_custom_fields set must contain at least 1 object."
